@@ -8,6 +8,12 @@
   present in the mobile app.
 - Phase 1 app shell and design-system components are available.
 
+## New Computer Setup
+
+See `specs/003-auth-profile/new-computer-setup.md` for the clone, branch,
+dependency, runtime configuration, and validation steps needed on another
+computer.
+
 ## Implementation Sequence
 
 1. Add `core/security/LocalAppUnlock` abstraction and fake/test adapter.
