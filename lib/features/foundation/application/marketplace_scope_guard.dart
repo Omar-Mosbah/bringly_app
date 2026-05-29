@@ -5,13 +5,23 @@ class MarketplaceScopeGuard {
 
   static const Set<String> unavailableActions = <String>{
     'approval',
+    'verification',
+    'matching',
+    'offers',
     'payment',
+    'payments',
+    'evidence',
     'delivery',
     'dispute',
+    'rating',
+    'ratings',
+    'notification',
+    'notifications',
+    'support',
     'payout',
     'auth',
     'session',
-    'profile',
+    'profile_editing',
   };
 
   bool isAvailable(String action) => !unavailableActions.contains(action);

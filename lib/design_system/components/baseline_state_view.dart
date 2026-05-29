@@ -1,3 +1,6 @@
+import 'package:bringly_app/app/theme/bringly_theme.dart';
+import 'package:bringly_app/design_system/components/bringly_button.dart';
+import 'package:bringly_app/design_system/tokens/bringly_radii.dart';
 import 'package:bringly_app/design_system/tokens/bringly_colors.dart';
 import 'package:bringly_app/design_system/tokens/bringly_spacing.dart';
 import 'package:bringly_app/features/foundation/domain/entities/baseline_ui_state.dart';
@@ -18,37 +21,48 @@ class BaselineStateView extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(BringlySpacing.lg),
       decoration: BoxDecoration(
-        color: BringlyColors.card,
-        borderRadius: BorderRadius.circular(8),
+        color: BringlyColors.card.withValues(alpha: 0.9),
+        borderRadius: BorderRadius.circular(BringlyRadii.md),
+        border: Border.all(color: BringlyColors.frostedBorder, width: 0.9),
+        boxShadow: const <BoxShadow>[
+          BoxShadow(
+            color: Color(0x14000000),
+            blurRadius: 24,
+            offset: Offset(0, 14),
+          ),
+        ],
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Icon(
-            _iconForState(state.kind),
-            color: _colorForState(state.kind),
-            size: 32,
-          ),
+          if (state.kind == BaselineUiStateKind.loading)
+            const CupertinoActivityIndicator(radius: 12)
+          else
+            Icon(
+              _iconForState(state.kind),
+              color: _colorForState(state.kind),
+              size: 32,
+            ),
           const SizedBox(height: BringlySpacing.md),
           Text(
             state.title,
             textAlign: TextAlign.center,
-            style: CupertinoTheme.of(context).textTheme.navTitleTextStyle,
+            style: BringlyTheme.compactLabelStyle(
+              context,
+            ).copyWith(fontSize: 20, color: BringlyColors.ink),
           ),
           const SizedBox(height: BringlySpacing.xs),
           Text(
             state.message,
             textAlign: TextAlign.center,
-            style: CupertinoTheme.of(
-              context,
-            ).textTheme.textStyle.copyWith(color: BringlyColors.mutedInk),
+            style: BringlyTheme.captionStyle(context),
           ),
           if (state.primaryAction != null &&
               onPrimaryAction != null) ...<Widget>[
             const SizedBox(height: BringlySpacing.md),
-            CupertinoButton.filled(
+            BringlyButton(
+              label: state.primaryAction!,
               onPressed: onPrimaryAction,
-              child: Text(state.primaryAction!),
             ),
           ],
         ],

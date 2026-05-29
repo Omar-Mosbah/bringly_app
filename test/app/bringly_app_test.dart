@@ -46,17 +46,22 @@ void main() {
     );
   }
 
-  testWidgets('launches with valid config', (tester) async {
+  testWidgets('launches with valid config into auth onboarding', (
+    tester,
+  ) async {
     await pumpApp(tester, valid: true);
     await tester.pumpAndSettle();
 
-    expect(find.text('Foundation ready'), findsOneWidget);
+    expect(find.text('Create your account'), findsOneWidget);
   });
 
-  testWidgets('shows blocked launch state with invalid config', (tester) async {
+  testWidgets('launches into blocked foundation startup with invalid config', (
+    tester,
+  ) async {
     await pumpApp(tester, valid: false);
     await tester.pumpAndSettle();
 
     expect(find.text('Configuration required'), findsOneWidget);
+    expect(find.text('Browse the marketplace'), findsNothing);
   });
 }

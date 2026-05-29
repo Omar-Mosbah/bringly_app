@@ -12,7 +12,7 @@ import 'package:bringly_app/features/foundation/data/fake_connectivity_client.da
 import 'package:bringly_app/features/foundation/domain/entities/environment_profile.dart';
 
 void main() {
-  testWidgets('Phase 0 shell smoke test', (WidgetTester tester) async {
+  testWidgets('Phase 1 shell smoke test', (WidgetTester tester) async {
     await tester.pumpWidget(
       BringlyApp(
         appConfig: AppConfig(
@@ -38,6 +38,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('Foundation ready'), findsOneWidget);
+    // Phase 1: app launches into the marketplace shell — shopper tab visible.
+    expect(find.text('Browse the marketplace'), findsOneWidget);
   });
 }

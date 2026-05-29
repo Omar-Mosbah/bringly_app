@@ -1,5 +1,5 @@
 <!-- SPECKIT START -->
-Current Spec Kit plan: specs/001-foundation-security-baseline/plan.md
+Current Spec Kit plan: specs/003-auth-profile/plan.md
 <!-- SPECKIT END -->
 
 You are building Bringly, a security-first Flutter marketplace app using

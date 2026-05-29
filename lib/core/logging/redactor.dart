@@ -17,8 +17,12 @@ class Redactor {
     caseSensitive: false,
   );
   static final RegExp _phoneRegExp = RegExp(r'(\+?\d[\d\s\-\(\)]{7,}\d)');
+  static final RegExp _supabaseAnonKeyAssignmentRegExp = RegExp(
+    r'(SUPABASE_ANON_KEY\s*=\s*)([^\s]+)',
+    caseSensitive: false,
+  );
   static final RegExp _tokenRegExp = RegExp(
-    r'\b(?:eyJ|sbp_|sk_|pk_|token_|anon_)[A-Za-z0-9\-\._=]{6,}\b',
+    r'\b(?:eyJ|sb_publishable_|sbp_|sk_|pk_|token_|anon_)[A-Za-z0-9\-\._=]{6,}\b',
   );
   static final RegExp _paymentRegExp = RegExp(
     r'\b(?:4242[\s-]?4242[\s-]?4242[\s-]?4242|card|cvv|iban|payment)\b',
@@ -51,6 +55,10 @@ class Redactor {
 
   String redactText(String input) {
     var output = input;
+    output = output.replaceAllMapped(
+      _supabaseAnonKeyAssignmentRegExp,
+      (match) => '${match.group(1)}$redactedToken',
+    );
     output = output.replaceAll(_emailRegExp, redactedEmail);
     output = output.replaceAll(_phoneRegExp, redactedPhone);
     output = output.replaceAll(_tokenRegExp, redactedToken);

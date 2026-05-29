@@ -3,8 +3,10 @@ import 'package:bringly_app/app/router/app_router.dart';
 import 'package:bringly_app/app/theme/bringly_theme.dart';
 import 'package:bringly_app/core/analytics/analytics_reporter.dart';
 import 'package:bringly_app/core/logging/safe_logger.dart';
+import 'package:bringly_app/features/auth/application/auth_controller.dart';
 import 'package:bringly_app/features/foundation/application/run_connectivity_check.dart';
 import 'package:bringly_app/features/foundation/application/run_protected_storage_smoke_test.dart';
+import 'package:bringly_app/features/profile/application/profile_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 
@@ -15,6 +17,8 @@ class BringlyApp extends StatefulWidget {
     required this.analyticsReporter,
     required this.runProtectedStorageSmokeTest,
     required this.runConnectivityCheck,
+    this.authController,
+    this.profileController,
     super.key,
   });
 
@@ -23,6 +27,8 @@ class BringlyApp extends StatefulWidget {
   final AnalyticsReporter analyticsReporter;
   final RunProtectedStorageSmokeTest runProtectedStorageSmokeTest;
   final RunConnectivityCheck runConnectivityCheck;
+  final AuthController? authController;
+  final ProfileController? profileController;
 
   @override
   State<BringlyApp> createState() => _BringlyAppState();
@@ -35,6 +41,8 @@ class _BringlyAppState extends State<BringlyApp> {
     analyticsReporter: widget.analyticsReporter,
     runProtectedStorageSmokeTest: widget.runProtectedStorageSmokeTest,
     runConnectivityCheck: widget.runConnectivityCheck,
+    authController: widget.authController,
+    profileController: widget.profileController,
   );
 
   @override

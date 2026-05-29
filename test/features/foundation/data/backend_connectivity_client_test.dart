@@ -2,6 +2,7 @@ import 'package:bringly_app/core/network/backend_connectivity_client.dart';
 import 'package:bringly_app/features/foundation/application/run_connectivity_check.dart';
 import 'package:bringly_app/features/foundation/application/validate_environment_profile.dart';
 import 'package:bringly_app/features/foundation/data/fake_connectivity_client.dart';
+import 'package:bringly_app/features/foundation/data/supabase_connectivity_client.dart';
 import 'package:bringly_app/features/foundation/domain/entities/connectivity_check_result.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -61,5 +62,29 @@ void main() {
     )(invalidProfile);
 
     expect(result.status, ConnectivityCheckStatus.invalidConfiguration);
+  });
+
+  test('supabase client only treats explicit health 200 as success', () {
+    expect(SupabaseConnectivityClient.healthPath, '/auth/v1/health');
+    expect(
+      SupabaseConnectivityClient.mapHealthResponseStatus(200),
+      BackendConnectivityStatus.success,
+    );
+    expect(
+      SupabaseConnectivityClient.mapHealthResponseStatus(401),
+      BackendConnectivityStatus.failed,
+    );
+    expect(
+      SupabaseConnectivityClient.mapHealthResponseStatus(403),
+      BackendConnectivityStatus.failed,
+    );
+    expect(
+      SupabaseConnectivityClient.mapHealthResponseStatus(404),
+      BackendConnectivityStatus.failed,
+    );
+    expect(
+      SupabaseConnectivityClient.mapHealthResponseStatus(500),
+      BackendConnectivityStatus.unavailable,
+    );
   });
 }

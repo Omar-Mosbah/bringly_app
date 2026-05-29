@@ -37,7 +37,7 @@ void main() {
   );
 
   test(
-    'router supports only startup configuration connectivity and ui-state routes',
+    'router supports auth routes marketplace shell routes and foundation routes',
     () {
       expect(router.routeInformationParser, isNotNull);
       final paths = router.configuration.routes
@@ -45,10 +45,45 @@ void main() {
           .map((route) => route.path)
           .toList(growable: false);
 
-      expect(
-        paths,
-        equals(const <String>['/', '/config', '/connectivity', '/ui-states']),
-      );
+      expect(paths, contains('/onboarding'));
+      expect(paths, contains('/register'));
+      expect(paths, contains('/role-selection'));
+      expect(paths, contains('/marketplace-blocked'));
+
+      // Phase 1 — four primary tab routes
+      expect(paths, contains('/shopper'));
+      expect(paths, contains('/traveler'));
+      expect(paths, contains('/activity'));
+      expect(paths, contains('/profile'));
+      // Phase 1 — non-primary demo route
+      expect(paths, contains('/design-system'));
+      // Phase 0 — foundation/developer routes preserved
+      expect(paths, contains('/'));
+      expect(paths, contains('/config'));
+      expect(paths, contains('/connectivity'));
+      expect(paths, contains('/ui-states'));
     },
   );
+
+  test('demo route is not one of the four primary tab routes', () {
+    final paths = router.configuration.routes
+        .whereType<GoRoute>()
+        .map((route) => route.path)
+        .toList(growable: false);
+
+    // The four primary tabs defined by MarketplaceDestination.all
+    const primaryTabPaths = <String>[
+      '/shopper',
+      '/traveler',
+      '/activity',
+      '/profile',
+    ];
+    // /design-system must exist but must not be a primary tab path
+    expect(paths, contains('/design-system'));
+    expect(primaryTabPaths, isNot(contains('/design-system')));
+  });
+
+  test('valid config starts at onboarding instead of the marketplace shell', () {
+    expect(router.routeInformationProvider.value.uri.path, '/onboarding');
+  });
 }

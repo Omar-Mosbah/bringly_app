@@ -1,57 +1,37 @@
-import 'package:bringly_app/app/app.dart';
-import 'package:bringly_app/app/config/app_config.dart';
-import 'package:bringly_app/core/analytics/noop_analytics_reporter.dart';
-import 'package:bringly_app/core/logging/in_memory_safe_logger.dart';
-import 'package:bringly_app/core/network/backend_connectivity_client.dart';
-import 'package:bringly_app/core/storage/memory_protected_storage.dart';
-import 'package:bringly_app/features/foundation/application/run_connectivity_check.dart';
-import 'package:bringly_app/features/foundation/application/run_protected_storage_smoke_test.dart';
-import 'package:bringly_app/features/foundation/data/fake_connectivity_client.dart';
-import 'package:bringly_app/features/foundation/domain/entities/environment_profile.dart';
+import 'package:bringly_app/app/theme/bringly_theme.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../app_shell/presentation/app_shell_test_helpers.dart';
+
 void main() {
-  Future<void> pumpApp(WidgetTester tester) {
-    return tester.pumpWidget(
-      BringlyApp(
-        appConfig: AppConfig(
-          environmentName: 'development',
-          supabaseUrl: 'https://example.supabase.co',
-          supabaseAnonKey: 'anon-public-key',
-          environmentProfile: const EnvironmentProfile(
-            name: 'development',
-            supabaseUrl: 'https://example.supabase.co',
-            supabaseAnonKeyPresent: true,
-            validationIssues: <EnvironmentValidationIssue>[],
-          ),
+  testWidgets(
+    'all foundation destinations are reachable via developer routes',
+    (tester) async {
+      // Build a router with initial location at the foundation startup route.
+      final router = buildFakeAppRouter();
+      router.go('/');
+
+      await tester.pumpWidget(
+        CupertinoApp.router(
+          theme: BringlyTheme.lightTheme(),
+          routerConfig: router,
         ),
-        logger: InMemorySafeLogger(),
-        analyticsReporter: const NoopAnalyticsReporter(),
-        runProtectedStorageSmokeTest: RunProtectedStorageSmokeTest(
-          MemoryProtectedStorage(),
-        ),
-        runConnectivityCheck: const RunConnectivityCheck(
-          FakeConnectivityClient(nextStatus: BackendConnectivityStatus.success),
-        ),
-      ),
-    );
-  }
+      );
+      await tester.pumpAndSettle();
 
-  testWidgets('all foundation destinations are reachable', (tester) async {
-    await pumpApp(tester);
-    await tester.pumpAndSettle();
+      expect(find.text('Startup'), findsWidgets);
+      await tester.tap(find.text('Configuration').last);
+      await tester.pumpAndSettle();
+      expect(find.text('Configuration is valid'), findsOneWidget);
 
-    expect(find.text('Startup'), findsWidgets);
-    await tester.tap(find.text('Configuration').last);
-    await tester.pumpAndSettle();
-    expect(find.text('Configuration is valid'), findsOneWidget);
+      await tester.tap(find.text('Connectivity').last);
+      await tester.pumpAndSettle();
+      expect(find.text('Connectivity check ready'), findsOneWidget);
 
-    await tester.tap(find.text('Connectivity').last);
-    await tester.pumpAndSettle();
-    expect(find.text('Connectivity check ready'), findsOneWidget);
-
-    await tester.tap(find.text('UI States').last);
-    await tester.pumpAndSettle();
-    expect(find.text('Loading state'), findsOneWidget);
-  });
+      await tester.tap(find.text('UI States').last);
+      await tester.pumpAndSettle();
+      expect(find.text('Loading state'), findsOneWidget);
+    },
+  );
 }
