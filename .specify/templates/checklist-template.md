@@ -32,6 +32,15 @@
 - [ ] CHK005 Item with specific criteria
 - [ ] CHK006 Final item in this category
 
+## Bringly Constitution Checks
+
+- [ ] CHK-S001 No hardcoded secrets, private keys, service-role keys, payment credentials, or sensitive runtime values are present
+- [ ] CHK-S002 Critical state changes are backend-controlled and covered by authorization checks
+- [ ] CHK-S003 Identity, travel, payment, receipt, document, and risk data are not logged or sent to analytics
+- [ ] CHK-S004 File uploads use backend-issued signed upload URLs where sensitive evidence is involved
+- [ ] CHK-S005 Clean Architecture boundaries are preserved between presentation, application, domain, and data layers
+- [ ] CHK-S006 Tests cover success, failure, loading, empty, unauthorized, blocked, and relevant edge states
+
 ## Notes
 
 - Check items off as completed: `[x]`

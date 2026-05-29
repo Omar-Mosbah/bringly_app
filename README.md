@@ -1,17 +1,36 @@
-# bringly_app
+# Bringly App
 
-A new Flutter project.
+Bringly is a security-first Flutter marketplace app. Phase 0 builds only the
+foundation shell, safe configuration validation, non-sensitive Supabase
+reachability checks, protected storage smoke testing, and reusable UI-state
+patterns.
 
-## Getting Started
+## Phase 0 commands
 
-This project is a starting point for a Flutter application.
+```bash
+flutter pub get
+flutter analyze
+flutter test
+```
 
-A few resources to get you started if this is your first Flutter project:
+## Safe runtime configuration
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+```bash
+flutter run \
+  --dart-define=BRINGLY_ENV=development \
+  --dart-define=SUPABASE_URL=https://jeqfsnsnpigvdpmlhqmh.supabase.co \
+  --dart-define=SUPABASE_ANON_KEY=<publishable-anon-key>
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Only use the public project URL and publishable anon key here. Do not commit
+service-role keys, private keys, passwords, payment credentials, or production
+secrets.
+
+## Phase 0 validation
+
+- Launch the app and verify only `Startup`, `Configuration`, `Connectivity`,
+  and `UI States` destinations are present.
+- Confirm invalid configuration shows a blocked state before any backend check.
+- Run the storage smoke test and confirm the harmless validation value is
+  cleaned up.
+- Run the connectivity check and confirm it shows safe status text only.

@@ -18,29 +18,40 @@
   the iteration process.
 -->
 
-**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]
+**Language/Version**: Dart [version] with Flutter [version] or NEEDS CLARIFICATION
 
-**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]
+**Primary Dependencies**: Flutter, Riverpod, go_router, Supabase client or backend API client, freezed/json_serializable, flutter_secure_storage abstraction or NEEDS CLARIFICATION
 
-**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
+**Storage**: Supabase-backed backend state; secure storage for small sensitive values only; non-sensitive cache only if justified
 
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]
+**Testing**: flutter test, widget tests, integration_test, golden tests where UI risk warrants
 
-**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
+**Target Platform**: iOS-first Flutter mobile app with Android compatibility or NEEDS CLARIFICATION
 
-**Project Type**: [e.g., library/cli/web-service/mobile-app/compiler/desktop-app or NEEDS CLARIFICATION]
+**Project Type**: Flutter mobile app using feature-first Clean Architecture
 
-**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]
+**Performance Goals**: Smooth mobile interactions, responsive marketplace lists/forms, efficient image upload flows, no avoidable rebuild hot spots
 
-**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]
+**Constraints**: Backend-controlled state transitions, no hardcoded secrets, no sensitive logs/analytics, signed uploads, privacy-safe local storage
 
-**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
+**Scale/Scope**: Controlled MVP corridor and approved low-risk item categories unless PLAN.md is amended
 
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- Security before features: Does this plan avoid hardcoded secrets, private keys,
+  payment credentials, sensitive logs, and client-only authorization decisions?
+- Backend-controlled lifecycle: Are all critical marketplace state transitions
+  performed by Supabase-backed server-side logic, Edge Functions, RPCs with
+  strict authorization, or backend APIs?
+- Clean Architecture: Are presentation, application/use-case, domain, and data
+  concerns separated, with integrations behind testable abstractions?
+- Privacy minimization: Are identity, travel, payment, receipt, document, and
+  risk data collected, stored, displayed, logged, and analyzed only as required?
+- Testable MVP discipline: Are success, failure, loading, empty, unauthorized,
+  blocked, and edge states covered, and is the scope inside the current PLAN.md
+  phase boundary?
 
 ## Project Structure
 
@@ -65,39 +76,39 @@ specs/[###-feature]/
 -->
 
 ```text
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
-src/
-├── models/
-├── services/
-├── cli/
-└── lib/
-
-tests/
-├── contract/
-├── integration/
-└── unit/
-
-# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
-backend/
-├── src/
-│   ├── models/
-│   ├── services/
-│   └── api/
-└── tests/
-
-frontend/
-├── src/
+lib/
+├── app/
+│   ├── router/
+│   ├── theme/
+│   ├── localization/
+│   └── config/
+├── core/
+│   ├── network/
+│   ├── security/
+│   ├── errors/
+│   ├── logging/
+│   ├── analytics/
+│   ├── storage/
+│   ├── widgets/
+│   └── utils/
+├── design_system/
+│   ├── tokens/
 │   ├── components/
-│   ├── pages/
-│   └── services/
-└── tests/
+│   ├── layouts/
+│   └── cupertino_adapters/
+└── features/
+    └── [feature]/
+        ├── presentation/
+        ├── application/
+        ├── domain/
+        └── data/
 
-# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
-api/
-└── [same as backend above]
+test/
+├── core/
+├── design_system/
+└── features/
 
-ios/ or android/
-└── [platform-specific structure: feature modules, UI flows, platform tests]
+integration_test/
 ```
 
 **Structure Decision**: [Document the selected structure and reference the real

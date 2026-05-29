@@ -32,6 +32,10 @@ migrate_working_dir/
 .pub/
 /build/
 /coverage/
+.env*
+*.tmp
+Thumbs.db
+.vscode/
 
 # Symbolication related
 app.*.symbols

@@ -98,6 +98,14 @@
 - **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
 - **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
 
+### Security & Privacy Requirements *(mandatory for Bringly)*
+
+- **SPR-001**: Critical authorization and marketplace state changes MUST be validated by backend-controlled Supabase policies, Edge Functions, RPCs, or backend APIs.
+- **SPR-002**: The mobile app MUST NOT log or send analytics for PII, auth tokens, payment data, identity documents, travel proof, receipts, or internal risk data.
+- **SPR-003**: File uploads involving documents, receipts, package photos, or dispute evidence MUST use backend-issued signed upload URLs.
+- **SPR-004**: Sensitive data MUST NOT be stored in normal local storage; secure storage is limited to small sensitive values such as auth/session tokens.
+- **SPR-005**: User-facing errors MUST be safe, actionable, and must not expose raw backend, Supabase, payment, or provider internals.
+
 ### Key Entities *(include if feature involves data)*
 
 - **[Entity 1]**: [What it represents, key attributes without implementation]
@@ -126,6 +134,6 @@
 -->
 
 - [Assumption about target users, e.g., "Users have stable internet connectivity"]
-- [Assumption about scope boundaries, e.g., "Mobile support is out of scope for v1"]
+- [Assumption about scope boundaries, e.g., "Feature remains inside the current PLAN.md MVP phase boundary"]
 - [Assumption about data/environment, e.g., "Existing authentication system will be reused"]
 - [Dependency on existing system/service, e.g., "Requires access to the existing user profile API"]
